@@ -1,4 +1,4 @@
-from model.pipeline import Pipeline
+from model.pipeline.pipeline import Pipeline
 from model.exception import ModelException
 from model.logger import    logging
 import sys
@@ -8,7 +8,14 @@ import sys
 def main_run():
     try :
        pipeline  = Pipeline()
-       Pipeline.run()
+       pipeline.run()
 
     except Exception as e:
-        ModelException(e,sys)
+           
+        logging.error(f"e")
+        print
+        raise ModelException(e,sys)
+
+
+if __name__ =="__main__":
+    main_run()

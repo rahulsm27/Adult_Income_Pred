@@ -1,0 +1,8 @@
+from model.logger import logging
+from model.exception import ModelException
+import os,sys
+
+try:
+    pass
+except Exception as e:
+    raise Exception(e,sys)

@@ -1,6 +1,8 @@
 from collections import namedtuple
+TrainingPipelineConfig = namedtuple('TrainingPipelineConfig',['artifact_dir'])
 
-DataIngestionArtifact= namedtuple('DataIngestionArtifact',['download_url','raw_dir','train_dir','test_dir'])
+DataIngestionConfig= namedtuple('DataIngestionArtifact',[
+    'download_url','raw_dir','tgz_dir','ingested_dir','train_dir','test_dir'])
 
 DataValidationArtifact= namedtuple('DataIngestionArtifact',[])
 
