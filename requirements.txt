@@ -4,3 +4,8 @@ Flask
 gunicorn
 sklearn
 PyYAML
+kaggle
+Kaggle
+scikit-learn
+wget
+zipfile

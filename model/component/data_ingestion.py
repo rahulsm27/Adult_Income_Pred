@@ -7,6 +7,14 @@ from model.logger import logging
 import sys,os
 import pandas as pd
 import numpy as np
+import zipfile
+
+os.environ['KAGGLE_USERNAME'] = "rahulsmahajan"
+os.environ['KAGGLE_KEY'] = "549ba3722f0dd76516e76cd068d475ab"
+
+from kaggle.api.kaggle_api_extended import KaggleApi
+api = KaggleApi()
+api.authenticate()
 
 
 import tarfile
@@ -23,7 +31,7 @@ class DataIngestion:
         except Exception as e:
             raise ModelException(e,sys) from e
         
-    def download_housing_data(self,) -> str:
+    def download_model_data(self,) -> str:
         try:
             #extracting remote url to download
             download_url = self.data_ingestion_config.download_url
@@ -33,12 +41,14 @@ class DataIngestion:
 
             os.makedirs(tgz_download_dir,exist_ok=True)
 
-            model_file_name = os.path.basename(download_url)
+            model_file_name = 'adult-income-dataset.zip'
 
             tgz_file_path = os.path.join(tgz_download_dir,model_file_name)
 
             logging.info(f"Downloading file from :[{download_url}] into :[{tgz_file_path}]")
-            urllib.request.urlretrieve(download_url,tgz_file_path)
+                
+            api.dataset_download_files(download_url, path=tgz_download_dir)
+           # urllib.request.urlretrieve(download_url,tgz_file_path)
             logging.info(f"File : [{tgz_file_path}] has been downloaded successfully")
 
             return tgz_file_path
@@ -54,9 +64,13 @@ class DataIngestion:
 
             os.makedirs(raw_data_dir,exist_ok=True)
 
-            logging.info(f"Extracign tgz file :[{tgz_file_path}] into dir ; [{raw_data_dir}]")
-            with tarfile.open(tgz_file_path) as model_file_obj:
-                model_file_obj.extractall(path=raw_data_dir)
+            logging.info(f"Extracign zip file :[{tgz_file_path}] into dir ; [{raw_data_dir}]")
+            
+            with zipfile.ZipFile(tgz_file_path, 'r') as zip_ref:
+                zip_ref.extractall(raw_data_dir)
+
+            # with tarfile.open(tgz_file_path) as model_file_obj:
+            #     model_file_obj.extractall(path=raw_data_dir)
             logging.info(f"Extracting completed")
         except Exception as e:
             raise ModelException(e,sys) from e
@@ -101,7 +115,7 @@ class DataIngestion:
 
     def initiate_data_ingestion(self)-> DataIngestionArtifact:
         try:
-            tgz_file_path = self.download_housing_data()
+            tgz_file_path = self.download_model_data()
 
             self.extract_tgz_file(tgz_file_path=tgz_file_path)
             return self.split_data_as_train_test()

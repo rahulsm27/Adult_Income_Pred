@@ -4,7 +4,7 @@ training_pipeline_config:
   artifact_dir: artifact # All artifacts are stored here from each artifcat 
 
 data_ingestion_config:
-  download_url: https://www.kaggle.com/datasets/overload10/adult-census-dataset/download?datasetVersionNumber=1
+  download_url: wenruliu/adult-income-dataset
   raw_dir: raw
   tgz_dir : tgz_data
   ingested_dir : ingested
